@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import Placeholder from "@/components/Placeholder";
-import { Stagger, Item, RiseLine } from "@/components/Reveal";
+import Photo from "@/components/Photo";
+import Badge from "@/components/Badge";
+import { Stagger, Item, RiseLine, Reveal } from "@/components/Reveal";
+import CTA from "@/components/CTA";
 import { APPAREL, peso } from "@/lib/catalog";
 
 export const metadata: Metadata = {
@@ -9,15 +11,16 @@ export const metadata: Metadata = {
     "Court wear and lifestyle pieces built for 34°C at two in the afternoon on an uncovered court in Metro Manila.",
 };
 
-const VARIANTS = [1, 2, 3, 4, 2, 1] as const;
-
 export default function ApparelPage() {
   return (
     <>
-      <section className="shell pt-[clamp(2.5rem,6vw,5rem)]">
+      <section className="shell pt-[clamp(2rem,5vw,4rem)]">
         <Stagger className="grid12 gap-y-10 items-end">
           <div className="col-span-12 lg:col-span-8">
-            <h1 className="display" style={{ fontSize: "var(--t-display)" }}>
+            <Item>
+              <Badge>Court wear · SS26</Badge>
+            </Item>
+            <h1 className="display mt-7" style={{ fontSize: "var(--t-display)" }}>
               <RiseLine>Dressed for</RiseLine>
               <RiseLine>
                 <span className="accent">thirty-four</span> degrees
@@ -34,54 +37,62 @@ export default function ApparelPage() {
         </Stagger>
       </section>
 
-      {/* Editorial pair — offset, not a banner. The placeholder compositions
-          are built on a 4:5 canvas and fall apart when cropped ultrawide. */}
-      <div className="shell mt-[var(--section-tight)]">
-        <div className="grid12 gap-y-8 items-end">
-          <div className="col-span-12 md:col-span-7">
-            <Placeholder
-              uid="apparel-lead"
-              variant={3}
-              ratio="4 / 3"
-              parallax={0.09}
+      {/* Editorial pair */}
+      <section className="shell mt-[var(--section-tight)]">
+        <div className="grid12 gap-6 items-end">
+          <Reveal className="col-span-12 md:col-span-8">
+            <Photo
+              seed="apparel-campaign"
+              alt="Two players walking off court, kit bags over shoulders"
+              ratio="16 / 10"
+              rounded="var(--r-xl)"
               label="Campaign · SS26"
-              dark
-            />
-          </div>
-          <div className="col-span-12 md:col-span-4 md:col-start-9">
-            <Placeholder
-              uid="apparel-lead-2"
-              variant={1}
+              parallax={0.08}
+              w={1600}
+              h={1000}
+              veil
+            >
+              <p
+                className="data absolute left-6 bottom-6"
+                style={{ color: "var(--paper)" }}
+              >
+                34°C · 2PM · UNCOVERED COURT
+              </p>
+            </Photo>
+          </Reveal>
+          <Reveal className="col-span-12 md:col-span-4" delay={0.08}>
+            <Photo
+              seed="apparel-detail"
+              alt="Detail of a heavyweight court tee with a screen-printed hem"
               ratio="4 / 5"
-              parallax={0.15}
+              rounded="var(--r-xl)"
               label="Court wear"
-              caption="Placeholder · replace with campaign photography"
+              parallax={0.14}
+              caption="Placeholder photography · replace with campaign imagery"
             />
-          </div>
+          </Reveal>
         </div>
-      </div>
+      </section>
 
+      {/* Range grid */}
       <section className="shell mt-[var(--section)]">
-        <div>
-          <div
-            className="border-t pt-8 flex items-end justify-between gap-6"
-            style={{ borderColor: "var(--ink)" }}
-          >
-            <h2 className="display" style={{ fontSize: "var(--t-sub)" }}>
-              The range
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <Badge>The range</Badge>
+            <h2 className="display mt-6" style={{ fontSize: "var(--t-head)" }}>
+              Six pieces
             </h2>
-            <p className="data" style={{ color: "var(--mute)" }}>
-              {APPAREL.length} pieces
-            </p>
           </div>
+          <p className="data" style={{ color: "var(--mute)" }}>
+            {APPAREL.length} pieces · SS26
+          </p>
         </div>
 
-        <div className="grid12 mt-14 gap-y-16">
+        <div className="grid12 mt-14 gap-6">
           {APPAREL.map((item, i) => (
-            <div
+            <Reveal
               key={item.slug}
-              /* Deliberately uneven: the first piece runs wide, the rest sit
-                 in a 4-col rhythm. Uniform grids are the category default. */
+              delay={(i % 3) * 0.06}
               className={
                 i === 0
                   ? "col-span-12 md:col-span-8"
@@ -89,44 +100,56 @@ export default function ApparelPage() {
               }
             >
               <article className="card block">
-                <Placeholder
-                  uid={`ap-${item.slug}`}
-                  variant={VARIANTS[i]}
-                  ratio={i === 0 ? "16 / 11" : "4 / 5"}
-                  label={item.index}
-                  parallax={i % 2 ? 0.12 : 0.07}
-                  className="card-art"
-                />
-                <div className="pt-6 pb-7">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="display text-[1.4rem]">{item.name}</h3>
-                    <p className="data whitespace-nowrap">{peso(item.price)}</p>
+                <div className="surface round-xl overflow-hidden">
+                  <Photo
+                    seed={`apparel-${item.slug}`}
+                    alt={`${item.name} — ${item.blurb}`}
+                    ratio={i === 0 ? "16 / 11" : "4 / 5"}
+                    rounded="0"
+                    label={item.index}
+                    parallax={i % 2 ? 0.1 : 0.06}
+                    className="card-art block"
+                  />
+                  <div className="p-6">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="display text-[1.4rem]">{item.name}</h3>
+                      <p className="data whitespace-nowrap">{peso(item.price)}</p>
+                    </div>
+                    <p
+                      className="data mt-2"
+                      style={{ color: "var(--mute)", letterSpacing: "0.08em" }}
+                    >
+                      {item.variant}
+                    </p>
+                    <p className="mt-4 text-[0.95rem]" style={{ color: "var(--mute)" }}>
+                      {item.blurb}
+                    </p>
                   </div>
-                  <p
-                    className="data mt-2"
-                    style={{ color: "var(--mute)", letterSpacing: "0.08em" }}
-                  >
-                    {item.variant}
-                  </p>
-                  {/* One line of copy per card — the competition ships none */}
-                  <p className="mt-4 text-[0.95rem]" style={{ color: "var(--mute)" }}>
-                    {item.blurb}
-                  </p>
                 </div>
               </article>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
+      {/* Fit statement */}
       <section className="shell mt-[var(--section)]">
-        <div className="border-t pt-10" style={{ borderColor: "var(--rule)" }}>
-          <p className="editorial max-w-[28ch]" style={{ fontSize: "var(--t-sub)" }}>
-            Cut for Filipino bodies, then graded up, not the other way round.
-            If the fit is wrong: thirty days, no argument.
+        <Reveal className="surface-wash grain relative round-xl p-[clamp(1.75rem,5vw,4rem)]">
+          <Badge>The fit</Badge>
+          <p className="editorial max-w-[26ch] mt-7" style={{ fontSize: "var(--t-sub)" }}>
+            Cut for Filipino bodies, then graded up, not the other way round. If
+            the fit is wrong: thirty days, no argument.
           </p>
-        </div>
+        </Reveal>
       </section>
+
+      <CTA
+        eyebrow="On and off court"
+        title="Kit for the whole session"
+        body="The hour before, the two hours on court at thirty-four degrees, and the hour after. Cut for the climate you actually play in."
+        primary={{ href: "/stockists", label: "Find a stockist" }}
+        secondary={{ href: "/paddles", label: "See the paddles" }}
+      />
     </>
   );
 }

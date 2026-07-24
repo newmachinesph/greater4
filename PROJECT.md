@@ -7,29 +7,35 @@ Router, Turbopack), React 19.2, Tailwind v4. Static — 11 prerendered routes.
 The court is 20×44 ft for singles *and* doubles; 90% of rated play is doubles
 (DUPR). The game was built for four. So is the brand.
 
-## State — 2026-07-19
+## State — 2026-07-24 (v2 redesign)
 - Six pages: `/`, `/paddles`, `/paddles/[slug]` (×3), `/apparel`, `/the-four`, `/stockists`
-- Build green, `tsc` clean, ESLint clean
-- axe-core: **0 WCAG 2.1/2.2 AA violations** across all six pages
-- 0 horizontal overflow at 1440px and 390px
-- Monochrome only. No colour tokens exist; hierarchy is scale/weight/tracking.
-- Anti-slop pass applied 2026-07-19 (Hallmark design + anti-ai-slop writing).
-  Nav is N6 masthead, footer is Ft5 statement, zero section eyebrows,
-  0 em dashes in ~2,530 words. See DECISIONS.md.
-- Motion 12 (`motion/react`). Court draws itself, hero staggers, spec bars
-  fill, product page paddle drags to rotate in CSS 3D. No Three.js — see
-  DECISIONS.md for why, and for the upgrade path if real 3D assets arrive.
-- Scroll-linked parallax on media + the court diagrams. Off entirely under
-  `prefers-reduced-motion` (measured 120.6px travel → 0px).
-- **JS 207.3 KB on `/` vs a 150 KB target.** ~159 KB is React+Next baseline,
-  ~38 KB Motion, ~11 KB parallax. Known miss, not an oversight.
+- Build green, `tsc` clean, ESLint clean, 11 static routes
+- 0 horizontal overflow at 1440px and 390px (verified with headless Chromium)
+- **v2 direction:** learned from modern Framer marketing templates (Goalz,
+  Starlight Camp, Galileo Club, Expanded Priority) and rebuilt every page in
+  their grammar — floating pill masthead, badge-pill eyebrows, rounded/pill
+  geometry, full-bleed grayscale photography, feature bento, animated stat
+  band, testimonials, FAQ accordion, closing CTA band. See DECISIONS.md.
+- **Still monochrome**, warmed: paper `#f6f4ee`, ink `#0c0b09`. No chromatic
+  tokens. Photography is desaturated to read in the same language.
+- Motion 12 (`motion/react`). Court draws itself, hero staggers, spec bars and
+  stat counters fill, product page paddle drags to rotate in CSS 3D, sections
+  reveal on scroll (v2 leans into this where v1 deliberately didn't). All
+  reduced-motion safe. No Three.js — see DECISIONS.md.
+- Scroll-linked parallax on media + court diagrams. Off under
+  `prefers-reduced-motion` (branch lives inside `useTransform`, never markup).
 
 ## Placeholders to replace before launch
-1. **Photography** — `components/Placeholder.tsx` draws SVG stand-ins. Biggest
-   single upgrade available. Product art (`Paddle.tsx`) likewise.
+1. **Photography** — `components/Photo.tsx` pulls deterministic grayscale
+   stand-ins from `picsum.photos` (seeded), over a drawn halftone backdrop that
+   shows if the host is slow or blocked. Swap `src` for brand-shot photography;
+   the API is stable. Product art (`Paddle.tsx`) and the court (`Court.tsx`)
+   stay drawn — those are the brand argument, not decoration.
 2. **Commerce** — "Add to bag" and Bag (0) are inert. No cart, no checkout.
 3. **Forms** — newsletter (footer) and club enquiry (`/stockists`) post to `#`.
 4. **Stockist list** — invented locations, flagged on the page itself.
+5. **Testimonials** — placeholder voices in `lib/catalog.ts`, flagged on the
+   home page. Replace with real, permissioned player quotes.
 
 ## Facts are load-bearing
 Every figure in `lib/catalog.ts` and the page copy is sourced (USAP rulebook,

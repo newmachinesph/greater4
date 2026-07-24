@@ -49,8 +49,11 @@ export default function PaddleViewer({ line }: { line: Line }) {
   return (
     <div className="relative">
       <motion.div
-        className="relative grain flex items-center justify-center py-[clamp(3rem,7vw,6rem)] cursor-grab active:cursor-grabbing touch-pan-y"
-        style={{ background: "var(--wash)", perspective: 1400 }}
+        className="relative grain round-xl overflow-hidden flex items-center justify-center py-[clamp(3rem,7vw,6rem)] cursor-grab active:cursor-grabbing touch-pan-y"
+        // clip-path clips across the 3D boundary; plain overflow:hidden doesn't
+        // clip a preserve-3d subtree, so the rotated paddle would poke out and
+        // widen the page.
+        style={{ background: "var(--wash)", perspective: 1400, clipPath: "inset(0 round var(--r-xl))" }}
         tabIndex={0}
         role="slider"
         aria-label={`Rotate the ${line.name} paddle to inspect both faces`}

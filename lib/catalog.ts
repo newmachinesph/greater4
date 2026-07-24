@@ -190,3 +190,101 @@ export const FACTS = [
 
 export const peso = (n: number) =>
   "₱" + n.toLocaleString("en-PH", { minimumFractionDigits: 0 });
+
+/* ------------------------------------------------------------------------
+   v2 content — the section types the reference templates ship (trust strip,
+   testimonials, FAQ). Numbers above are sourced; the material below is
+   editorial or placeholder and is flagged as such on the pages that use it.
+   ------------------------------------------------------------------------ */
+
+/** Venues and bodies, for the trust marquee. Real names, public record. */
+export const PARTNERS = [
+  "Helios Pickleball",
+  "SM Active Hub",
+  "The Podium Courts",
+  "Philippine Pickleball Federation",
+  "BGC Sports Centre",
+  "Cebu Pickleball Club",
+  "PPA Tour Asia",
+];
+
+/** The three-part promise, for the home features band. */
+export const PILLARS = [
+  {
+    k: "01",
+    t: "The specification is the marketing",
+    d: "Core, face, weight, handle, shape and conformance, published on the card before you buy. A brand that hides its spec is telling you something about its spec.",
+  },
+  {
+    k: "02",
+    t: "Raw face, always",
+    d: "Paint fills the weave of a carbon face and flattens the friction that makes spin. We leave the T700 bare and let the paddle look like what it is.",
+  },
+  {
+    k: "03",
+    t: "Control over power",
+    d: "USA Pickleball has cut the power ceiling twice since 2024 and banned grit treatments. The sport is legislating toward the soft game. We were already there.",
+  },
+  {
+    k: "04",
+    t: "Priced here, for here",
+    d: "In pesos, on the page, no enquiry form. We would rather lose a sale to sticker shock than win one through ambiguity.",
+  },
+];
+
+export type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  seed: string;
+};
+
+/** Placeholder voices — replace with real, permissioned player quotes. */
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    quote:
+      "The Bayanihan resets like nothing else I've held. The pace just dies on the face and drops in the kitchen. My third shot got two years better in a week.",
+    name: "Marisol Reyes",
+    role: "4.0 · Pasig",
+    seed: "player-1",
+  },
+  {
+    quote:
+      "I take the net early and I don't give it back. Sulong punches through a hand battle before the other pair can answer. It plays as fast as it reads on paper.",
+    name: "Emman Villanueva",
+    role: "Open · Ortigas",
+    seed: "player-2",
+  },
+  {
+    quote:
+      "First real paddle I've owned instead of whatever the court hands out. Kasama flatters a swing that's still learning, and it cost less than a month of bookings.",
+    name: "Joy Tan",
+    role: "3.5 · Mandaue",
+    seed: "player-3",
+  },
+];
+
+/** The questions the spec-forward copy invites. */
+export const FAQ: { q: string; a: string }[] = [
+  {
+    q: "Why a raw carbon face and not a painted one?",
+    a: "Paint fills the weave of a carbon face and flattens the micro-texture that grips the ball to make spin. Raw Toray T700 keeps that friction, within the USA Pickleball surface-roughness limit. It photographs less glossy and it plays better, so we leave it bare.",
+  },
+  {
+    q: "Is 16mm thicker core better than 14mm?",
+    a: "Neither is better in the abstract, they're different tools. A 16mm core absorbs pace for the soft control game (Bayanihan, Kasama); a 14mm core returns the ball faster for forward pressure at the net (Sulong). Core thickness is unregulated, so ours is a design choice, not a compliance figure.",
+  },
+  {
+    q: "Are these paddles tournament legal?",
+    a: "Yes. Every model conforms to USA Pickleball 2026 equipment standards: combined length and width under 24 in, length under 17 in, surface roughness within Rz 30 µm, and a power reading under the current 0.43 PBCoR ceiling.",
+  },
+  {
+    q: "Why price everything openly in pesos?",
+    a: "Because at a premium price point, confident pricing is positioning. No enquire-for-price, no landed-cost theatre. If the number gives you sticker shock, we'd rather you know now than feel misled later.",
+  },
+  {
+    q: "What does the warranty cover?",
+    a: "Two years against core delamination and face separation, the two failures that end a paddle's life early. Play with it for thirty days; if it's the wrong paddle for your game, send it back for a full refund.",
+  },
+];
+

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Court from "@/components/Court";
 import Parallax from "@/components/Parallax";
-import { Stagger, RiseLine } from "@/components/Reveal";
-import Placeholder from "@/components/Placeholder";
+import Photo from "@/components/Photo";
+import Badge from "@/components/Badge";
+import { Stagger, RiseLine, Reveal } from "@/components/Reveal";
 import Marquee from "@/components/Marquee";
+import CTA from "@/components/CTA";
+import { PILLARS } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "The Four",
@@ -26,15 +28,16 @@ const TIMELINE = [
 export default function TheFourPage() {
   return (
     <>
-      <section className="shell pt-[clamp(2.5rem,6vw,5rem)]">
+      <section className="shell pt-[clamp(2rem,5vw,4rem)]">
         <Stagger>
-          <h1 className="display" style={{ fontSize: "var(--t-display)" }}>
+          <Badge>The thesis</Badge>
+          <h1 className="display mt-7" style={{ fontSize: "var(--t-display)" }}>
             <RiseLine>The court never</RiseLine>
             <RiseLine>gets smaller</RiseLine>
           </h1>
         </Stagger>
 
-        <div className="grid12 mt-16 gap-y-10">
+        <div className="grid12 mt-14 gap-y-12 items-start">
           <div className="col-span-12 lg:col-span-6 prose-g4">
             <p className="lead">
               A tennis court shrinks for singles. The alleys go dead, the space
@@ -57,9 +60,11 @@ export default function TheFourPage() {
           </div>
 
           <div className="col-span-12 lg:col-span-5 lg:col-start-8">
-            <Parallax speed={0.05}>
-              <Court uid="thefour" draw className="w-full h-auto" />
-            </Parallax>
+            <div className="surface-wash grain relative round-xl p-6">
+              <Parallax speed={0.05}>
+                <Court uid="thefour" draw className="w-full h-auto" />
+              </Parallax>
+            </div>
           </div>
         </div>
       </section>
@@ -76,159 +81,119 @@ export default function TheFourPage() {
         />
       </div>
 
-      {/* The gap — the section every competitor skips */}
-      <section id="gap" className="shell pt-[var(--section)] scroll-mt-24">
+      {/* The gap */}
+      <section id="gap" className="shell pt-[var(--section)] scroll-mt-28">
         <div className="grid12 gap-y-12">
-          <div className="col-span-12 md:col-span-3">
-            <p className="data" style={{ color: "var(--mute)" }}>
-              The gap
-            </p>
-          </div>
-          <div className="col-span-12 md:col-span-9">
-            <h2 className="editorial" style={{ fontSize: "var(--t-head)" }}>
-              We did not start this because the market needed another paddle. We
-              started it because we kept buying the wrong ones.
+          <div className="col-span-12 lg:col-span-5">
+            <Badge>The gap</Badge>
+            <h2 className="editorial mt-7" style={{ fontSize: "var(--t-head)" }}>
+              We didn&rsquo;t start this because the market needed another
+              paddle. We started it because we kept buying the wrong ones.
             </h2>
-
-            <div className="grid12 mt-14 gap-y-10">
-              <div className="col-span-12 lg:col-span-6 prose-g4">
-                <p style={{ color: "var(--mute)" }}>
-                  The cheap paddles were honest about being cheap and dishonest
-                  about everything else: no published core, no face material,
-                  a weight range wide enough to drive a jeepney through.
-                </p>
-                <p style={{ color: "var(--mute)" }}>
-                  The imported paddles were genuinely good and genuinely priced
-                  for somewhere else. Add freight, add duty, add the distributor,
-                  and a paddle designed for a retiree in Florida arrives here
-                  costing more than a month of court fees.
-                </p>
-                <p style={{ color: "var(--mute)" }}>
-                  In between there was nothing. No brand willing to publish a
-                  full specification, price it openly in pesos, and admit that
-                  the thing it makes is for four people standing at a kitchen
-                  line in Pasig on a Tuesday night.
-                </p>
-              </div>
-
-              <div className="col-span-12 lg:col-start-8 lg:col-span-5">
-                <Placeholder
-                  uid="four-workshop"
-                  variant={1}
-                  ratio="4 / 5"
-                  parallax={0.13}
-                  label="Workshop · Pasig"
-                  caption="Placeholder · replace with founder and workshop photography"
-                />
-              </div>
+            <div className="mt-8">
+              <Photo
+                seed="four-workshop"
+                alt="A workshop bench with raw carbon paddle faces laid out"
+                ratio="4 / 3"
+                rounded="var(--r-xl)"
+                label="Workshop · Pasig"
+                parallax={0.1}
+                caption="Placeholder photography · replace with founder and workshop imagery"
+              />
             </div>
+          </div>
+
+          <div className="col-span-12 lg:col-span-6 lg:col-start-7 prose-g4 lg:pt-16">
+            <p style={{ color: "var(--mute)" }}>
+              The cheap paddles were honest about being cheap and dishonest
+              about everything else: no published core, no face material, a
+              weight range wide enough to drive a jeepney through.
+            </p>
+            <p style={{ color: "var(--mute)" }}>
+              The imported paddles were genuinely good and genuinely priced for
+              somewhere else. Add freight, add duty, add the distributor, and a
+              paddle designed for a retiree in Florida arrives here costing more
+              than a month of court fees.
+            </p>
+            <p style={{ color: "var(--mute)" }}>
+              In between there was nothing. No brand willing to publish a full
+              specification, price it openly in pesos, and admit that the thing
+              it makes is for four people standing at a kitchen line in Pasig on
+              a Tuesday night.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Principles */}
       <section className="shell pt-[var(--section)]">
-        <div>
-          <div className="border-t pt-10" style={{ borderColor: "var(--ink)" }}>
-            <p className="data mb-6" style={{ color: "var(--mute)" }}>
-              What we hold to
-            </p>
-          </div>
-        </div>
-
-        <div className="grid12 mt-4">
-          {[
-            {
-              n: "01",
-              t: "The specification is the marketing",
-              d: "Core, face, weight, handle, shape, conformance, published on the card, before you buy, on every model. A brand that hides its specification is telling you something about its specification.",
-            },
-            {
-              n: "02",
-              t: "Raw face, always",
-              d: "Paint fills the weave of a carbon face and flattens the friction that makes spin. It photographs beautifully and it plays worse. We leave the T700 bare and let the paddle look like what it is.",
-            },
-            {
-              n: "03",
-              t: "Control over power",
-              d: "USA Pickleball has cut the power ceiling twice since 2024 and outlawed grit treatments outright. The sport is legislating its way toward the soft game. Building for power now is building for a rulebook that is already gone.",
-            },
-            {
-              n: "04",
-              t: "Priced here, for here",
-              d: "In pesos, on the page, no enquiry form. We would rather lose a sale to sticker shock than win one through ambiguity.",
-            },
-          ].map((p) => (
-            <div
-              key={p.n}
-              className="col-span-12 md:col-span-6 lg:col-span-3"
-            >
-              <div
-                className="border-t pt-6 pb-10 md:pr-8 h-full"
-                style={{ borderColor: "var(--rule)" }}
-              >
+        <Badge>What we hold to</Badge>
+        <div className="grid12 mt-10 gap-5">
+          {PILLARS.map((p, i) => (
+            <Reveal key={p.k} delay={(i % 4) * 0.06} className="col-span-12 md:col-span-6 lg:col-span-3">
+              <div className="surface h-full p-7">
                 <p className="data" style={{ color: "var(--mute)" }}>
-                  {p.n}
+                  {p.k}
                 </p>
                 <h3 className="display text-[1.35rem] mt-6 leading-[1.05]">{p.t}</h3>
                 <p className="mt-4 text-[0.95rem]" style={{ color: "var(--mute)" }}>
                   {p.d}
                 </p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* Timeline */}
-      <section className="mt-[var(--section)] relative grain grain-invert"
-        style={{ background: "var(--ink)", color: "var(--paper)" }}>
-        <div className="shell py-[var(--section)]">
+      <section className="shell pt-[var(--section)]">
+        <div
+          className="surface-ink grain grain-invert relative round-2xl overflow-hidden px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)]"
+        >
           <div className="grid12 gap-y-10">
-            <div className="col-span-12 md:col-span-3">
-              <p className="data" style={{ color: "var(--mute-inv)" }}>
-                Ten years
-              </p>
-            </div>
-            <div className="col-span-12 md:col-span-9">
-              <h2 className="display" style={{ fontSize: "var(--t-head)" }}>
-                From one clinic
-                <br />
-                to a federation
+            <div className="col-span-12 lg:col-span-4">
+              <Badge inverted>Ten years</Badge>
+              <h2 className="display mt-7" style={{ fontSize: "var(--t-head)" }}>
+                From one clinic to a federation
               </h2>
             </div>
-          </div>
 
-          <div className="mt-16">
-            <ol>
-              {TIMELINE.map(([year, event]) => (
-                <li
+            <ol className="col-span-12 lg:col-span-7 lg:col-start-6">
+              {TIMELINE.map(([year, event], i) => (
+                <Reveal
                   key={year}
-                  className="grid12 gap-y-2 py-6 border-t"
-                  style={{ borderColor: "var(--rule-inv)" }}
+                  as="li"
+                  delay={i * 0.03}
+                  className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-1 py-5"
+                  y={14}
                 >
-                  <p className="col-span-12 md:col-span-3 data" style={{ color: "var(--mute-inv)" }}>
+                  <span className="data pt-1" style={{ color: "var(--mute-inv)" }}>
                     {year}
-                  </p>
-                  <p className="col-span-12 md:col-span-9 lead" style={{ fontSize: "1.05rem" }}>
+                  </span>
+                  <span
+                    className="lead"
+                    style={{ fontSize: "1.05rem", borderTop: "1px solid var(--rule-inv)", paddingTop: "0.75rem" }}
+                  >
                     {event}
-                  </p>
-                </li>
+                  </span>
+                </Reveal>
               ))}
             </ol>
           </div>
 
-          <div className="mt-16">
-            <p className="editorial" style={{ fontSize: "var(--t-sub)", maxWidth: "34ch" }}>
-              Ten years from a single gym in Cebu to a recognised national sport.
-              Someone should be making the equipment here.
-            </p>
-            <Link href="/paddles" className="btn btn-inv data mt-10">
-              See the paddles
-            </Link>
-          </div>
+          <p className="editorial mt-14 max-w-[34ch]" style={{ fontSize: "var(--t-sub)" }}>
+            Ten years from a single gym in Cebu to a recognised national sport.
+            Someone should be making the equipment here.
+          </p>
         </div>
       </section>
+
+      <CTA
+        title="Built for the ninety per cent"
+        body="Three paddles and a court-wear range for the game Filipinos actually play. Full specification on every card, priced openly in pesos."
+        primary={{ href: "/paddles", label: "See the paddles" }}
+        secondary={{ href: "/stockists", label: "Find a stockist" }}
+      />
     </>
   );
 }

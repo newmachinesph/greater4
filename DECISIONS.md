@@ -186,3 +186,63 @@ of the first. Parallax alone gives the depth; the hijack is the part users
 complain about. Say the word if you want it.
 
 JS on `/` moved 196.6 KB → 207.3 KB.
+
+## 2026-07-24 — v2 redesign: the Framer-template grammar, on the brand's terms
+
+Brief: study four modern Framer marketing templates (Goalz, Starlight Camp,
+Galileo Club, Expanded Priority) and rebuild every page in that idiom, with
+real imagery. Those templates share a vocabulary — floating pill nav,
+badge-pill eyebrows, big rounded photography, feature bento, animated stat
+bands, testimonials, FAQ accordion, a closing CTA band, generous rounded
+geometry. v2 adopts all of it, but routed through the parts of Greater4 that
+are load-bearing rather than replacing them.
+
+**What stayed non-negotiable.** The brand argument is a set of sourced facts
+(20×44 ft, 90% doubles, 0.43 PBCoR) and a Filipino partnership lexicon; none
+of that moved. The drawn court and paddle stay drawn — they *are* the argument,
+so they are the one thing a template's stock-photo hero would have cheapened.
+
+**Monochrome held; warmth added.** The client mandate is monochrome and it is
+the brand's clearest differentiator in an all-caps-sans category, so v2 keeps
+it: no chromatic tokens. It only warms the neutrals (paper `#fff`→`#f6f4ee`,
+ink `#000`→`#0c0b09`), which reads as uncoated stock and pairs with the
+photography. Real photos would break monochrome, so `Photo.tsx` desaturates
+them (`grayscale(1) contrast(1.04)`); grayscale sport photography is a premium
+editorial look in its own right, and it resolves the tension between "use real
+images" and "monochrome only" instead of picking one.
+
+**Rounded geometry is the biggest visible shift.** v1 was hard-edged editorial;
+the reference set is soft and rounded. A radius scale plus pill buttons and
+badge chips is the cheapest, most monochrome-safe way to read as "one of those
+sites". Elevation, which normally rides a coloured shadow, is carried by a wash
+fill plus a hairline ring — a real surface without leaving the palette.
+
+**Departures from v1 rules, taken deliberately.**
+- *Eyebrows are back, as status pills.* v1 removed numbered mono eyebrows as an
+  AI tell. The badge pill is different in kind: it carries a live fact or status
+  ("90% of rated play is doubles", "USAP 2026 conforming"), never a section
+  index, so it argues rather than decorates.
+- *Scroll reveals are back.* v1 held to one orchestrated hero entrance because
+  "a page where every section fades in never settles." The template look depends
+  on sections settling in on scroll, so v2 uses a `Reveal` wrapper widely — but
+  once-only, and collapsed to a plain fade under reduced motion.
+- *Photography replaces drawn placeholders* for lifestyle/scene/apparel, per the
+  explicit brief. A drawn halftone backdrop sits behind every photo, so a slow
+  or blocked image host still renders a branded field, not a broken box.
+
+**Two bugs the rebuild surfaced, both caught by testing, not reading.**
+1. *Unlayered component CSS beat Tailwind utilities.* In Tailwind v4, plain
+   (unlayered) `.btn { display }` overrides a utility `hidden`/`md:inline-flex`,
+   so the header's Bag/Shop leaked onto mobile and widened the page. Fix: wrap
+   the component classes in `@layer components` so the utilities layer wins.
+2. *The `draw` court went invisible under reduced motion.* Framer paints
+   `pathLength` with `stroke-dasharray`; a court that initialised at
+   `pathLength:0` and then flipped to its static branch after hydration kept the
+   `0px 1px` dasharray and drew nothing — for exactly the reduced-motion users
+   the static branch exists to serve. Fix: keep pathLength animate-driven in
+   every case (target 1 with a 0s transition when still), never hand it back to
+   `style`, which framer ignores once it owns the value.
+
+**Also fixed:** the 3D paddle viewer escaped its `overflow:hidden` stage
+(preserve-3d subtrees aren't clipped by overflow) and widened the PDP; a
+`clip-path: inset(0 round …)` clips across the 3D boundary where overflow can't.

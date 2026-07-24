@@ -56,15 +56,16 @@ export default function Court({
     { x: net + kitchen + 22, y: H * 0.73 },
   ];
 
-  /** Ink a stroke on. Static instances get the final frame with no transition. */
-  const line = (delay: number) =>
-    still
-      ? {}
-      : {
-          initial: { pathLength: 0 },
-          animate: on ? { pathLength: 1 } : { pathLength: 0 },
-          transition: { duration: 0.9, delay, ease: EASE },
-        };
+  /** Ink a stroke on. pathLength stays animate-driven in every case (framer
+      paints it via stroke-dasharray, and a value it once controlled can't be
+      handed back to `style`). A still instance just targets pathLength 1 with a
+      zero-duration transition, so reduced motion and static courts render the
+      finished frame instead of being stranded at the pathLength:0 initial. */
+  const line = (delay: number) => ({
+    initial: { pathLength: still ? 1 : 0 },
+    animate: { pathLength: on ? 1 : 0 },
+    transition: still ? { duration: 0 } : { duration: 0.9, delay, ease: EASE },
+  });
 
   const fade = (delay: number, to = 0.3) =>
     still

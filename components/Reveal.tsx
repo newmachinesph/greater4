@@ -1,9 +1,46 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { ReactNode } from "react";
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react";
+import { useRef, type ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * Scroll-reveal. v2 leans into the Framer-template rhythm where sections
+ * settle in as you reach them, so this is used more liberally than v1's single
+ * hero entrance — but still fires once, never re-triggers, and collapses to a
+ * plain fade under reduced motion so it can't drift for anyone sensitive to it.
+ */
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  y = 22,
+  as = "div",
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  y?: number;
+  as?: "div" | "li" | "span";
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -12% 0px" });
+  const reduce = useReducedMotion();
+  const MotionTag = motion[as];
+
+  return (
+    <MotionTag
+      ref={ref as never}
+      className={className}
+      initial={{ opacity: 0, y: reduce ? 0 : y }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: reduce ? 0.2 : 0.7, delay: reduce ? 0 : delay, ease: EASE }}
+    >
+      {children}
+    </MotionTag>
+  );
+}
 
 /**
  * The page's one orchestrated entrance.
