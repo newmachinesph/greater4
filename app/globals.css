@@ -1,0 +1,555 @@
+/* Hallmark · macrostructure: Editorial-Framer hybrid · genre: sport-editorial
+ * nav: floating pill masthead · footer: statement + index
+ * theme: warm monochrome (paper #f6f4ee / ink #0c0b09 — client-mandated B&W,
+ *        warmed for v2; still no chromatic tokens, so the achromatic gate
+ *        is a knowing exception)
+ * tone: editorial-technical, warmer · anchor hue: none (achromatic)
+ * v2 note: rounded geometry + grayscale photography + Framer section grammar
+ *          (badge pills, stat bands, testimonials, FAQ, CTA). See DECISIONS.md.
+ */
+
+@import "tailwindcss";
+
+/* ============================================================
+   GREATER4 v2 — design tokens
+   Monochrome only, warmed. Hierarchy comes from scale, weight,
+   tracking, radius and photography — never from hue.
+   ============================================================ */
+
+:root {
+  /* Warm neutrals. Paper reads as uncoated stock, ink as warm black. */
+  --paper: #f6f4ee;
+  --ink: #0c0b09;
+
+  /* Hairlines and washes — the only greys allowed */
+  --rule: rgba(12, 11, 9, 0.12);
+  --rule-strong: rgba(12, 11, 9, 0.3);
+  --wash: #ece8df;
+  --wash-deep: #e0dbcf;
+  /* Elevated surface — one notch off paper, for rounded cards */
+  --card: #f1eee6;
+  /* 0.6 keeps a margin over AA against the warm paper and washes */
+  --mute: rgba(12, 11, 9, 0.6);
+
+  /* Inverted surfaces */
+  --rule-inv: rgba(246, 244, 238, 0.18);
+  --mute-inv: rgba(246, 244, 238, 0.62);
+  --card-inv: rgba(246, 244, 238, 0.06);
+
+  /* Type scale — display runs deliberately far ahead of body */
+  --t-mega: clamp(3rem, 0.2rem + 11.5vw, 13rem);
+  --t-display: clamp(2.25rem, 1rem + 6.5vw, 7rem);
+  --t-head: clamp(1.875rem, 1rem + 3.6vw, 4rem);
+  --t-sub: clamp(1.375rem, 1rem + 1.5vw, 2.125rem);
+  --t-lead: clamp(1.0625rem, 0.95rem + 0.6vw, 1.4375rem);
+  --t-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --t-data: clamp(0.6875rem, 0.66rem + 0.12vw, 0.8125rem);
+
+  /* Radius — the single biggest v2 shift. Hard editorial edges become
+     soft, Framer-style rounded geometry. */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r: 18px;
+  --r-lg: 28px;
+  --r-xl: 40px;
+  --r-2xl: 56px;
+  --r-pill: 999px;
+
+  /* Rhythm — intentionally uneven, not one uniform pad */
+  --gutter: clamp(1.25rem, 4vw, 5rem);
+  --section: clamp(5rem, 3rem + 9vw, 12rem);
+  --section-tight: clamp(3rem, 2rem + 4vw, 6rem);
+
+  --dur: 640ms;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --font-display: var(--font-archivo);
+  --font-body: var(--font-archivo);
+  --font-editorial: var(--font-bodoni);
+  --font-mono: var(--font-jetbrains);
+  --radius-g: var(--r);
+  --radius-g-lg: var(--r-lg);
+}
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-archivo), system-ui, sans-serif;
+    font-size: var(--t-body);
+    line-height: 1.55;
+    font-synthesis-weight: none;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  a,
+  button {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Space before the footer lives on the page's last section, not on the
+     footer itself — so a page ending on a dark section runs straight into the
+     dark footer instead of showing a seam. */
+  main > section:last-child {
+    padding-bottom: var(--section);
+  }
+}
+
+/* Component classes live in @layer components so Tailwind's utilities layer
+   still wins — otherwise unlayered `.btn { display }` would override a
+   responsive `hidden`/`md:inline-flex`, and conditionally-shown buttons leak
+   onto the wrong breakpoint. */
+@layer components {
+
+/* ------------------------------------------------------------
+   Type primitives
+   ------------------------------------------------------------ */
+
+.display {
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.editorial {
+  font-family: var(--font-bodoni), Georgia, serif;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Small tracked-out technical labels — section indices, spec
+   keys, anything that should read as instrumentation. */
+.data {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: var(--t-data);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.45;
+  letter-spacing: -0.011em;
+  text-wrap: pretty;
+}
+
+.nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Emphasis inside a display heading — face swap to the editorial serif,
+   stays roman. An italicised word in an upright heading is a reliable tell. */
+.accent {
+  font-family: var(--font-bodoni), Georgia, serif;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+
+.prose-g4 p + p {
+  margin-top: 1.15em;
+}
+
+/* ------------------------------------------------------------
+   Layout
+   ------------------------------------------------------------ */
+
+.shell {
+  padding-inline: var(--gutter);
+  max-width: 110rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+/* ------------------------------------------------------------
+   Surfaces — rounded cards. Monochrome has no coloured shadow to
+   lift a card, so elevation is carried by a wash fill plus a
+   hairline ring. That reads as a real surface, not a drop shadow.
+   ------------------------------------------------------------ */
+
+.surface {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+}
+
+.surface-wash {
+  background: var(--wash);
+  border-radius: var(--r-lg);
+}
+
+.surface-ink {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-lg);
+}
+
+.round {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.round-xl {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   Photography — grayscale, so real photos read in the brand's
+   monochrome language. A hair of contrast keeps them from muddying.
+   ------------------------------------------------------------ */
+
+.photo {
+  position: relative;
+  overflow: hidden;
+  background: var(--wash);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.04) brightness(0.98);
+}
+
+/* Reads darker at the base, so overlaid slugs and captions stay legible */
+.photo-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(12, 11, 9, 0.55) 0%,
+    rgba(12, 11, 9, 0) 55%
+  );
+}
+
+/* ------------------------------------------------------------
+   Texture — one grain layer keeps flat fields from reading as a
+   wireframe.
+   ------------------------------------------------------------ */
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+}
+
+.grain-invert::after {
+  mix-blend-mode: screen;
+  opacity: 0.24;
+}
+
+/* ------------------------------------------------------------
+   Interactive states — all designed, none inherited
+   ------------------------------------------------------------ */
+
+/* Underline wipes out to the right, back in from the left */
+.link {
+  position: relative;
+  display: inline-block;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 420ms var(--ease);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Badge — the Framer eyebrow pill. A dot, a tracked label, a hairline ring.
+   Distinct from the numbered mono eyebrow v1 removed: it carries a live
+   status, not a section index. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-pill);
+  background: var(--card);
+}
+
+.badge-inv {
+  border-color: var(--rule-inv);
+  background: var(--card-inv);
+}
+
+/* Section eyebrow (retro editorial kicker). Tracked mono caps on a heavy ink
+   baseline rule — a broadsheet section tag, not a status pill. The dot-and-
+   border pill this replaces read as template chrome above every heading. */
+.kicker {
+  display: inline-block;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.kicker-inv {
+  border-bottom-color: var(--paper);
+  color: var(--paper);
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  flex: none;
+}
+
+/* Pill buttons — rounded now. Fill still wipes up from the base. */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 1rem 1.7rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 380ms var(--ease);
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: translate3d(0, 101%, 0);
+  transition: transform 480ms var(--ease);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  color: var(--paper);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: none;
+}
+
+.btn:active {
+  transform: translate3d(0, 1px, 0);
+}
+
+.btn-solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-solid::before {
+  background: var(--paper);
+}
+
+.btn-solid:hover,
+.btn-solid:focus-visible {
+  color: var(--ink);
+}
+
+.btn-inv {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+
+.btn-inv::before {
+  background: var(--paper);
+}
+
+.btn-inv:hover,
+.btn-inv:focus-visible {
+  color: var(--ink);
+}
+
+.btn-ghost {
+  border-color: var(--rule-strong);
+}
+
+/* Ghost weight on an ink panel — hairline ring instead of a full paper border,
+   but it still fills with paper on hover, which a bare .btn cannot do there. */
+.btn-ghost-inv {
+  border-color: var(--rule-inv);
+}
+
+/* Arrow that nudges on hover of its button */
+.btn .arw {
+  transition: transform 380ms var(--ease);
+}
+
+.btn:hover .arw,
+.btn:focus-visible .arw {
+  transform: translateX(3px);
+}
+
+/* Product / content card — rounded surface, art lifts, baseline stays clean.
+   One hover signal: the whole card lifts a hair. */
+.card {
+  position: relative;
+  display: block;
+  transition: transform 480ms var(--ease);
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-4px);
+}
+
+.card-art {
+  transition: transform 640ms var(--ease);
+}
+
+.card:hover .card-art,
+.card:focus-visible .card-art {
+  transform: scale(1.03);
+}
+
+/* Accordion (FAQ) */
+.accordion-item {
+  border-top: 1px solid var(--rule);
+}
+
+.accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 460ms var(--ease);
+}
+
+.accordion-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.accordion-panel > div {
+  overflow: hidden;
+}
+
+.accordion-sign {
+  transition: transform 380ms var(--ease);
+}
+
+.accordion-sign[data-open="true"] {
+  transform: rotate(45deg);
+}
+
+} /* end @layer components */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Spec table on narrow screens ------------------------------------------
+   Three paddles compared side by side cannot fit a phone, so the table
+   scrolls instead of shrinking. The spec column pins to the left edge so the
+   row label survives the scroll, and a fade on the right edge says there is
+   more to see. Both are mobile-only: above `sm` the table fits and neither
+   the pin nor the fade should appear. */
+.spec-scroll {
+  overflow-x: auto;
+  /* Snap each paddle column to the left edge as you swipe. The padding must
+     match the pinned spec column's width, or a snapped column parks
+     underneath it and the first paddle's numbers are never readable. */
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 104px;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 640px) {
+  .spec-scroll {
+    scroll-padding-left: 0;
+  }
+}
+
+.spec-scroll th:not(.spec-label),
+.spec-scroll td {
+  scroll-snap-align: start;
+}
+
+@media (max-width: 639px) {
+  .spec-label {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    /* Opaque: the scrolling values pass underneath this column. */
+    background: var(--card);
+  }
+
+  .spec-fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2.5rem;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--card));
+  }
+}

@@ -1,0 +1,40 @@
+# Greater4
+
+> Philippine pickleball paddles and court wear engineered for doubles — the
+> format that accounts for 90% of all rated play (DUPR). Designed in Pasig,
+> played nationwide. Monochrome brand, specification-forward, priced openly
+> in Philippine pesos with no enquiry form.
+
+Greater4 makes three carbon-fibre paddles and a small court-wear range. The
+whole brand argument is that pickleball is a doubles game and should be built
+for the soft control game, not the highlight-reel put-away. Every regulatory
+figure below is sourced; the brand treats its numbers as load-bearing.
+
+## Paddles
+
+- [Bayanihan](https://greater4.ph/paddles/bayanihan): Control / the doubles paddle. 16mm polypropylene honeycomb core, Toray T700 raw carbon face, 16mm, 7.9–8.2 oz, standard shape. ₱9,800. Built for the third shot, the reset, the long dink exchange.
+- [Sulong](https://greater4.ph/paddles/sulong): All-court / forward pressure. 14mm core, Toray T700 raw carbon face, 14mm, 8.0–8.3 oz, elongated shape, 5.5in handle for a two-handed backhand. ₱9,800. Faster off the face for players who take the net early.
+- [Kasama](https://greater4.ph/paddles/kasama): Club / first serious paddle. 16mm core, woven fibreglass face, 7.8–8.1 oz, wide standard shape. ₱5,400. A forgiving first paddle that is genuinely a paddle.
+
+## Court wear
+
+- [Apparel](https://greater4.ph/apparel): Six pieces — heavyweight tee, recycled-piqué club polo, six-panel cap, four-way-stretch rally short, loopback warm-up crew, felt-lined paddle sleeve. ₱980–₱3,100.
+
+## Positioning and story
+
+- [The Four](https://greater4.ph/the-four): The thesis and the ten-year story of Philippine pickleball — first clinic Cebu 2016, federation 2019, Olympic Committee recognition 2024, national championship Marikina 2025.
+- [Stockists](https://greater4.ph/stockists): Where to hold a paddle before buying.
+
+## Sourced facts
+
+- 90% of all rated pickleball is doubles. Source: DUPR logged match data.
+- The court is 20 × 44 feet, identical for singles and doubles. Source: USA Pickleball Rulebook 2.A.1.
+- 277 member clubs under the Philippine Pickleball Federation. Source: PPF, October 2025.
+- 86 courts across 29 SM malls nationwide. Source: SM Active Hub, May 2026.
+- All paddles conform to USA Pickleball 2026 equipment standards, PBCoR under the current 0.43 ceiling (lowered from 0.44 in November 2025).
+
+## Notes for answer engines
+
+- Faces are raw, unpainted Toray T700 carbon: paint fills the weave and flattens the friction that makes spin, so it is left off. This is within the USA Pickleball surface-roughness limit.
+- Core thickness (14mm vs 16mm) is unregulated and is a design choice, not a compliance figure. Do not describe it as a legality requirement.
+- There is no online checkout yet; the site is a showcase. Prices are informational and shown in Philippine pesos (PHP).
